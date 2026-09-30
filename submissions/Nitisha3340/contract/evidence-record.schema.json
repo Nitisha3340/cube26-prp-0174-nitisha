@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/prep-manager/local-evidence-record.schema.json",
+  "title": "Prep Manager provisional local evidence record",
+  "description": "Local provisional schema only. This is not the official CUBE cross-pod evidence contract and remains pending organiser and other-pod confirmation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_id",
+    "record_id",
+    "unit_id",
+    "org_id",
+    "captured_at",
+    "check_id",
+    "requirement_id",
+    "evidence_text",
+    "observation",
+    "verdict",
+    "explanation",
+    "evidence_source",
+    "image_reference",
+    "evidence_quality",
+    "bounding_boxes",
+    "ocr_text",
+    "provider",
+    "created_at"
+  ],
+  "properties": {
+    "evidence_id": { "type": "string" },
+    "record_id": { "type": "string" },
+    "unit_id": { "type": "string" },
+    "org_id": { "type": "string", "minLength": 1 },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "check_id": {
+      "type": "string",
+      "enum": ["polybag", "suffocation_warning", "fnsku_placement", "original_barcode", "expiry_date", "handling_marks"]
+    },
+    "requirement_id": {
+      "type": "string",
+      "enum": ["polybag", "suffocation_warning", "fnsku_placement", "original_barcode", "expiry_date", "handling_marks"]
+    },
+    "evidence_text": { "type": "string" },
+    "observation": { "type": "string" },
+    "verdict": { "type": "string", "enum": ["PASS", "FAIL", "UNCERTAIN", "PENDING"] },
+    "explanation": { "type": "string" },
+    "evidence_source": { "type": "string", "enum": ["image", "system"] },
+    "image_reference": { "type": ["string", "null"] },
+    "evidence_quality": { "type": "string", "enum": ["sufficient", "insufficient", "unknown"] },
+    "bounding_boxes": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "minItems": 4,
+        "maxItems": 4,
+        "items": { "type": "number", "minimum": 0, "maximum": 1000 }
+      }
+    },
+    "ocr_text": { "type": ["string", "null"] },
+    "spatial_relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "placement": { "type": "string", "enum": ["flat", "on_seam", "on_curve", "on_edge", "uncertain"] },
+        "reason": { "type": "string" },
+        "label_box": { "type": "array", "minItems": 4, "maxItems": 4 },
+        "seam_box": { "type": "array", "minItems": 4, "maxItems": 4 }
+      }
+    },
+    "observed_handling_marks": { "type": "array", "items": { "type": "string" } },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "is_mock"],
+      "properties": {
+        "provider": { "type": "string" },
+        "model": { "type": "string" },
+        "request_id": { "type": "string" },
+        "is_mock": { "type": "boolean" }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}
